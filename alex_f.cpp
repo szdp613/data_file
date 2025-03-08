@@ -113,6 +113,9 @@ void conv1(){
     }
     weight_file.close();
 
+    cout << "test1 : " << output[0][0][0] << endl;
+    cout << "test1 : " << output[0][0][1] << endl;
+
     // Add bias
     for (int oc = 0; oc < OUTPUT_CHANNELS; oc++) {
         for (int oh = 0; oh < OUTPUT_HEIGHT; oh++) {
@@ -133,6 +136,9 @@ void conv1(){
         }
     }
 
+    cout << "test2 : " << output[0][0][0] << endl;
+    cout << "test2 : " << output[0][0][1] << endl;
+
     // Max pooling
     
     for (int oc = 0; oc < OUTPUT_CHANNELS; oc++) {
@@ -151,11 +157,13 @@ void conv1(){
 
                 output_1st[oc][oh][ow] = max_value;
 
-                if(oc == 0 && oh == 0 && ow == 0)
-                    cout << "conv1 : " << output_1st[oc][oh][ow] << endl;
+                
             }
         }
     }
+
+    cout << "test3 : " << output_1st[0][0][0] << endl;
+    cout << "test3 : " << output_1st[0][0][1] << endl;
     /*for (int oc = 0; oc < 64; oc++) {
         for (int oh = 0; oh < 27; oh++) {
             for (int ow = 0; ow < 27; ow++) {

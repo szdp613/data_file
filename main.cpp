@@ -111,9 +111,15 @@ SC_MODULE( Pad_Conv1_MaxP1 ) {
 								}
 							}
 
+							if ( (i == 0 && j == 0) || (i == 0 && j == 1))
+								cout << "test1 : " << conv1_out[z][i][j];
+
 							conv1_out[z][i][j] += conv1_bias;
 							if( conv1_out[z][i][j] < 0) 
 								conv1_out[z][i][j] = 0;
+
+							if ( (i == 0 && j == 0) || (i == 0 && j == 1))
+								cout << "test2 : "  << conv1_out[z][i][j];
 
 						}
 					}
