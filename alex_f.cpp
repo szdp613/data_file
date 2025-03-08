@@ -115,6 +115,7 @@ void conv1(){
 
     cout << "test1 : " << output[0][0][0] << endl;
     cout << "test1 : " << output[0][0][1] << endl;
+    cout << "test1 : " << output[63][54][54] << endl;
 
     // Add bias
     for (int oc = 0; oc < OUTPUT_CHANNELS; oc++) {
@@ -138,6 +139,7 @@ void conv1(){
 
     cout << "test2 : " << output[0][0][0] << endl;
     cout << "test2 : " << output[0][0][1] << endl;
+    cout << "test2 : " << output[63][54][54] << endl;
 
     // Max pooling
     
@@ -164,6 +166,7 @@ void conv1(){
 
     cout << "test3 : " << output_1st[0][0][0] << endl;
     cout << "test3 : " << output_1st[0][0][1] << endl;
+    cout << "test3 : " << output_1st[63][26][26] << endl;
     /*for (int oc = 0; oc < 64; oc++) {
         for (int oh = 0; oh < 27; oh++) {
             for (int ow = 0; ow < 27; ow++) {
