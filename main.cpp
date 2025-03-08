@@ -107,18 +107,22 @@ SC_MODULE( Pad_Conv1_MaxP1 ) {
 								for (int l = 0; l < 11; l++) {
 									for (int m = 0; m < 11; m++) {
 										conv1_out[z][i][j] += image_pad[k][i*4+l][j*4+m] * conv1_ker[k][l][m];
+										if ( (z == 0 && i == 0 && j == 0)) {
+											cout << "test1 : " << image_pad[k][i*4+l][j*4+m] << endl;
+											cout << "test1 : " << conv1_ker[k][l][m] << endl;
+										}
 									}
 								}
 							}
 
-							if ( (i == 0 && j == 0) || (i == 0 && j == 1))
+							if ( (z == 0 && i == 0 && j == 0) || (z == 0 && i == 0 && j == 1))
 								cout << "test1 : " << conv1_out[z][i][j];
 
 							conv1_out[z][i][j] += conv1_bias;
 							if( conv1_out[z][i][j] < 0) 
 								conv1_out[z][i][j] = 0;
 
-							if ( (i == 0 && j == 0) || (i == 0 && j == 1))
+							if ( (z == 0 && i == 0 && j == 0) || (z == 0 && i == 0 && j == 1))
 								cout << "test2 : "  << conv1_out[z][i][j];
 
 						}
