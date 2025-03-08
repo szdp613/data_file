@@ -59,7 +59,6 @@ SC_MODULE( Monitor ) {
 			if (input_file.is_open() && name_file.is_open()) {
 				
 				for (int i = 0; i < 1000; i++) {
-					input_file >> prob[i];
 					input_file >> val[i];
 					input_file >> index[i];
 				}
@@ -75,11 +74,22 @@ SC_MODULE( Monitor ) {
 				
 				name_file.close();
 
+				float total = 0;
+				for (int i = 0; i < 1000; i++) {
+					total += exp(val[i]);
+					
+				}
+				for (int i = 0; i < 1000; i++) {
+					prob[i] = exp(val[i]) / total;
+					prob[i] *= 100;
+				}
+
+
 				cout<<"==================================================================\n";
         		cout<<"  "<<setw(5)<<"idx"<<"  |    "<<setw(10)<<"val"<<"  |    "<<setw(10)<<"possibility"<<"  |      "<<setw(10)<<"class name"<<"\n";
         		cout<<"==================================================================\n";
 				for (int i = 999; i >= 900; i--) {
-					cout<<left<<"  "<<setw(5)<<index[i]<<"  |    "<<setprecision(6)<<setw(10)<<val[i]<<"  |    "<<setprecision(6)<<setw(10)<<prob[i]<<"   |      "<<setw(10)<<name[index[i]]<<"\n";
+					cout<<left<<"  "<<setw(5)<<index[i]<<"  |    "<<setprecision(6)<<val[i]<<"  |    "<<setprecision(6)<<prob[i]<<"   |      "<<setw(10)<<name[index[i]]<<"\n";
 				}
 				cout<<"==================================================================\n";
 			} 
@@ -973,7 +983,7 @@ SC_MODULE( FC8 ) {
 	void run() {
 
 		float temp;
-		vector< tuple<float,float,int> > final_sort;
+		vector< pair<float,int> > final_sort;
 		float val_final [1000];
 
 		if ( rst.read() == 1 ) {
@@ -1034,7 +1044,7 @@ SC_MODULE( FC8 ) {
 				
 
 				for (int i = 0 ; i < 1000 ; i++) {
-					final_sort.push_back(make_tuple(fc8_out[i],val_final[i],i)); 
+					final_sort.push_back(make_pair(val_final[i],i)); 
 				}
 
 				sort(final_sort.begin(),final_sort.end());
@@ -1057,8 +1067,7 @@ SC_MODULE( FC8 ) {
 
 				for (int i = 0; i < 1000; i++) {
 					stage8_file << fixed << setprecision(5) << final_sort[i].first << " ";
-					stage8_file << fixed << setprecision(5) << final_sort[i].second << " ";
-					stage8_file << final_sort[i].third << "\n";
+					stage8_file << final_sort[i].second << "\n";
 				}
 
 				stage8_file.close();
