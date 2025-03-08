@@ -64,15 +64,18 @@ SC_MODULE( Monitor ) {
 				input_file.close();
 
 				for (int i = 0; i < 1000; i++) {
-					name_file >> name[i];
+					string line;
+					while (getline(name_file, line)) {
+						name[i] = line.c_str();
+					}
 				}
 				name_file.close();
 
 				cout<<"=========================================================\n";
-        		cout<<"  "<<setw(5)<<"idx"<<"  |    "<<setw(20)<<"possibility"<<"   |      "<<setw(20)<<"class name"<<"\n";
+        		cout<<"  "<<setw(5)<<"idx"<<"  |    "<<setw(10)<<"possibility"<<"   |      "<<setw(10)<<"class name"<<"\n";
         		cout<<"=========================================================\n";
 				for (int i = 999; i >= 900; i--) {
-					cout<<"  "<<setw(5)<<index[i]<<"  |    "<<setw(20)<<prob[i]<<"   |      "<<setw(20)<<name[index[i]]<<"\n";
+					cout<<"  "<<setw(5)<<index[i]<<"  |    "<<setw(10)<<prob[i]<<"   |      "<<setw(10)<<name[index[i]]<<"\n";
 				}
 				cout<<"=========================================================\n";
 			} 
