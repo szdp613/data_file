@@ -71,6 +71,7 @@ SC_MODULE( Monitor ) {
 				while (getline(name_file, line)) {
 					name[idx_name] = line;
 					idx_name++;
+					name[idx_name].erase(remove(name[idx_name].begin(), name[idx_name].end(), char_to_remove), name[idx_name].end());
 				}
 				
 				name_file.close();
@@ -1017,13 +1018,14 @@ SC_MODULE( FC8 ) {
 						fc8_out[z] += image_pad[j] * fc8_ker[j];
 
 					fc8_out[z] += fc8_bias;
-					val_final[z] = fc8_out[z];
+					
 
 				}
 
 				float total = 0;
 				for (int i = 0; i < 1000; i++) {
 					total += exp(fc8_out[i]);
+					val_final[i] = exp(fc8_out[i]);
 				}
 				for (int i = 0; i < 1000; i++) {
 					fc8_out[i] = exp(fc8_out[i]) / total;
