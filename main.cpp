@@ -46,6 +46,7 @@ SC_MODULE( Monitor ) {
 	void run() {
 
 		float prob [1000];
+		float val [1000];
 		int index [1000];
 		string name [1000];
 
@@ -59,25 +60,28 @@ SC_MODULE( Monitor ) {
 				
 				for (int i = 0; i < 1000; i++) {
 					input_file >> prob[i];
+					input_file >> val[i];
 					input_file >> index[i];
 				}
 				input_file.close();
 
-				for (int i = 0; i < 1000; i++) {
-					string line;
-					while (getline(name_file, line)) {
-						name[i] = line.c_str();
-					}
+				
+				string line;
+				int idx_name = 0;
+				while (getline(name_file, line)) {
+					name[idx_name] = line;
+					idx_name++;
 				}
+				
 				name_file.close();
 
-				cout<<"=========================================================\n";
-        		cout<<"  "<<setw(5)<<"idx"<<"  |    "<<setw(10)<<"possibility"<<"   |      "<<setw(10)<<"class name"<<"\n";
-        		cout<<"=========================================================\n";
+				cout<<"==================================================================\n";
+        		cout<<"  "<<setw(5)<<"idx"<<"  |    "<<setw(10)<<"val"<<"  |    "<<setw(10)<<"possibility"<<"  |      "<<setw(10)<<"class name"<<"\n";
+        		cout<<"==================================================================\n";
 				for (int i = 999; i >= 900; i--) {
-					cout<<"  "<<setw(5)<<index[i]<<"  |    "<<setw(10)<<prob[i]<<"   |      "<<setw(10)<<name[index[i]]<<"\n";
+					cout<<"  "<<setw(5)<<index[i]<<"  |    "<<setprecision(6)<<setw(10)<<val[i]<<"  |    "<<setprecision(6)<<setw(10)<<prob[i]<<"   |      "<<setw(10)<<name[index[i]]<<"\n";
 				}
-				cout<<"=========================================================\n";
+				cout<<"==================================================================\n";
 			} 
 			else {
 				cout << "Failed of open stage8 image!!" << endl;
@@ -970,6 +974,7 @@ SC_MODULE( FC8 ) {
 
 		float temp;
 		vector< pair<float,int> > final_sort;
+		float val_final [1000];
 
 		if ( rst.read() == 1 ) {
 		}
@@ -1012,6 +1017,7 @@ SC_MODULE( FC8 ) {
 						fc8_out[z] += image_pad[j] * fc8_ker[j];
 
 					fc8_out[z] += fc8_bias;
+					val_final[z] = fc8_out[z];
 
 				}
 
@@ -1049,8 +1055,9 @@ SC_MODULE( FC8 ) {
 			if (stage8_file.is_open()) {
 
 				for (int i = 0; i < 1000; i++) {
-					stage8_file << fixed << setprecision(25) << final_sort[i].first;
-					stage8_file << " " << final_sort[i].second << "\n";
+					stage8_file << fixed << setprecision(25) << final_sort[i].first << " ";
+					stage8_file << fixed << setprecision(25) << val_final[i] << " ";
+					stage8_file << final_sort[i].second << "\n";
 				}
 
 				stage8_file.close();
