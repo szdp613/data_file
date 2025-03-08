@@ -973,7 +973,7 @@ SC_MODULE( FC8 ) {
 	void run() {
 
 		float temp;
-		vector< pair<float,int> > final_sort;
+		vector< tuple<float,float,int> > final_sort;
 		float val_final [1000];
 
 		if ( rst.read() == 1 ) {
@@ -1017,14 +1017,14 @@ SC_MODULE( FC8 ) {
 						fc8_out[z] += image_pad[j] * fc8_ker[j];
 
 					fc8_out[z] += fc8_bias;
-					
+					val_final[i] = fc8_out[i];
 
 				}
 
 				float total = 0;
 				for (int i = 0; i < 1000; i++) {
 					total += exp(fc8_out[i]);
-					val_final[i] = exp(fc8_out[i]);
+					
 				}
 				for (int i = 0; i < 1000; i++) {
 					fc8_out[i] = exp(fc8_out[i]) / total;
@@ -1034,7 +1034,7 @@ SC_MODULE( FC8 ) {
 				
 
 				for (int i = 0 ; i < 1000 ; i++) {
-					final_sort.push_back(make_pair(fc8_out[i],i)); 
+					final_sort.push_back(make_tuple(fc8_out[i],val_final[i],i)); 
 				}
 
 				sort(final_sort.begin(),final_sort.end());
@@ -1056,9 +1056,9 @@ SC_MODULE( FC8 ) {
 			if (stage8_file.is_open()) {
 
 				for (int i = 0; i < 1000; i++) {
-					stage8_file << fixed << setprecision(25) << final_sort[i].first << " ";
-					stage8_file << fixed << setprecision(25) << val_final[i] << " ";
-					stage8_file << final_sort[i].second << "\n";
+					stage8_file << fixed << setprecision(5) << final_sort[i].first << " ";
+					stage8_file << fixed << setprecision(5) << final_sort[i].second << " ";
+					stage8_file << final_sort[i].third << "\n";
 				}
 
 				stage8_file.close();
