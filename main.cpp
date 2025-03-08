@@ -742,19 +742,18 @@ SC_MODULE( FC6 ) {
 					bias6_file >> temp;
 					fc6_bias = temp;
 
-					for (int i = 0; i < 4096; i++) {
 
-						fc6_out[i] = 0;
+					fc6_out[z] = 0;
 
-						for (int j = 0; j < 9216; j++) 
-							fc6_out[i] += image_pad[j] * fc6_ker[j];
+					for (int j = 0; j < 9216; j++) 
+						fc6_out[z] += image_pad[j] * fc6_ker[j];
 
-						fc6_out[i] += fc6_bias;
+					fc6_out[z] += fc6_bias;
 
-						if( fc6_out[i] < 0) 
-							fc6_out[i] = 0;
+					if( fc6_out[z] < 0) 
+						fc6_out[z] = 0;
 
-					}
+					
 
 				}
 				weight6_file.close();
