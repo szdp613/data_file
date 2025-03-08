@@ -37,6 +37,60 @@ SC_MODULE( Pattern ) {
 	}
 };
 
+SC_MODULE( Monitor ) {	
+
+	sc_in < bool > rst;
+	sc_in_clk clock;
+	sc_in < bool > stage8_valid;
+		
+	void run() {
+
+		float prob [1000];
+		int index [1000];
+		string name [1000];
+
+		if ( rst.read() == 1 ) {
+		}
+		else if ( stage8_valid.read() == true) {
+
+			ifstream input_file("stage8_output.txt");
+			ifstream name_file("data/imagenet_classes.txt");
+			if (input_file.is_open() && name_file.is_open()) {
+				
+				for (int i = 0; i < 1000; i++) {
+					input_file >> prob[i];
+					input_file >> index[i];
+				}
+				input_file.close();
+
+				for (int i = 0; i < 1000; i++) {
+					name_file >> name[i];
+				}
+				name_file.close();
+
+				cout<<"=========================================================\n";
+        		cout<<"  "<<setw(5)<<"idx"<<"  |    "<<setw(20)<<"possibility"<<"   |      "<<setw(20)<<"class name"<<"\n";
+        		cout<<"=========================================================\n";
+				for (int i = 999; i >= 900; i--) {
+					cout<<"  "<<setw(5)<<index[i]<<"  |    "<<setw(20)<<prob[i]<<"   |      "<<setw(20)<<name[index[i]]<<"\n";
+				}
+				cout<<"=========================================================\n";
+			} 
+			else {
+				cout << "Failed of open stage8 image!!" << endl;
+				return ;
+			}
+		}
+	}
+	
+	SC_CTOR( Monitor )
+	{	
+		SC_METHOD( run );
+		sensitive << clock.pos();
+		dont_initialize();
+	}
+};
+
 SC_MODULE( Pad_Conv1_MaxP1 ) {	
 
 	sc_in < bool > rst;
@@ -80,9 +134,9 @@ SC_MODULE( Pad_Conv1_MaxP1 ) {
 				return ;
 			}
 
-			cout << fixed << setprecision(25) << image_pad[0][2][2] << endl;
-			cout << fixed << setprecision(25) << image_pad[0][2][3] << endl;
-			cout << fixed << setprecision(25) << image_pad[2][225][225] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][2][2] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][2][3] << endl;
+			// cout << fixed << setprecision(25) << image_pad[2][225][225] << endl;
 
 			ifstream weight1_file("data/conv1_weight.txt");
 			ifstream bias1_file("data/conv1_bias.txt");
@@ -216,9 +270,9 @@ SC_MODULE( Pad_Conv2_MaxP2 ) {
 				return ;
 			}
 
-			cout << fixed << setprecision(25) << image_pad[0][2][2] << endl;
-			cout << fixed << setprecision(25) << image_pad[0][2][3] << endl;
-			cout << fixed << setprecision(25) << image_pad[63][28][28] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][2][2] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][2][3] << endl;
+			// cout << fixed << setprecision(25) << image_pad[63][28][28] << endl;
 
 			ifstream weight2_file("data/conv2_weight.txt");
 			ifstream bias2_file("data/conv2_bias.txt");
@@ -351,9 +405,9 @@ SC_MODULE( Pad_Conv3 ) {
 				return ;
 			}
 
-			cout << fixed << setprecision(25) << image_pad[0][1][1] << endl;
-			cout << fixed << setprecision(25) << image_pad[0][1][2] << endl;
-			cout << fixed << setprecision(25) << image_pad[191][13][13] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][1][1] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][1][2] << endl;
+			// cout << fixed << setprecision(25) << image_pad[191][13][13] << endl;
 
 			ifstream weight3_file("data/conv3_weight.txt");
 			ifstream bias3_file("data/conv3_bias.txt");
@@ -476,9 +530,9 @@ SC_MODULE( Pad_Conv4 ) {
 				return ;
 			}
 
-			cout << fixed << setprecision(25) << image_pad[0][1][1] << endl;
-			cout << fixed << setprecision(25) << image_pad[0][1][2] << endl;
-			cout << fixed << setprecision(25) << image_pad[383][13][13] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][1][1] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][1][2] << endl;
+			// cout << fixed << setprecision(25) << image_pad[383][13][13] << endl;
 
 			ifstream weight4_file("data/conv4_weight.txt");
 			ifstream bias4_file("data/conv4_bias.txt");
@@ -602,9 +656,9 @@ SC_MODULE( Pad_Conv5_MaxP5 ) {
 				return ;
 			}
 
-			cout << fixed << setprecision(25) << image_pad[0][1][1] << endl;
-			cout << fixed << setprecision(25) << image_pad[0][1][2] << endl;
-			cout << fixed << setprecision(25) << image_pad[255][13][13] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][1][1] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0][1][2] << endl;
+			// cout << fixed << setprecision(25) << image_pad[255][13][13] << endl;
 
 			ifstream weight5_file("data/conv5_weight.txt");
 			ifstream bias5_file("data/conv5_bias.txt");
@@ -729,9 +783,9 @@ SC_MODULE( FC6 ) {
 				return ;
 			}
 
-			cout << fixed << setprecision(25) << image_pad[0] << endl;
-			cout << fixed << setprecision(25) << image_pad[1] << endl;
-			cout << fixed << setprecision(25) << image_pad[9215] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0] << endl;
+			// cout << fixed << setprecision(25) << image_pad[1] << endl;
+			// cout << fixed << setprecision(25) << image_pad[9215] << endl;
 
 			ifstream weight6_file("data/fc6_weight.txt");
 			ifstream bias6_file("data/fc6_bias.txt");
@@ -830,9 +884,9 @@ SC_MODULE( FC7 ) {
 				return ;
 			}
 
-			cout << fixed << setprecision(25) << image_pad[0] << endl;
-			cout << fixed << setprecision(25) << image_pad[1] << endl;
-			cout << fixed << setprecision(25) << image_pad[4095] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0] << endl;
+			// cout << fixed << setprecision(25) << image_pad[1] << endl;
+			// cout << fixed << setprecision(25) << image_pad[4095] << endl;
 
 			ifstream weight7_file("data/fc7_weight.txt");
 			ifstream bias7_file("data/fc7_bias.txt");
@@ -912,6 +966,7 @@ SC_MODULE( FC8 ) {
 	void run() {
 
 		float temp;
+		vector< pair<float,int> > final_sort;
 
 		if ( rst.read() == 1 ) {
 		}
@@ -931,9 +986,9 @@ SC_MODULE( FC8 ) {
 				return ;
 			}
 
-			cout << fixed << setprecision(25) << image_pad[0] << endl;
-			cout << fixed << setprecision(25) << image_pad[1] << endl;
-			cout << fixed << setprecision(25) << image_pad[4095] << endl;
+			// cout << fixed << setprecision(25) << image_pad[0] << endl;
+			// cout << fixed << setprecision(25) << image_pad[1] << endl;
+			// cout << fixed << setprecision(25) << image_pad[4095] << endl;
 
 			ifstream weight8_file("data/fc8_weight.txt");
 			ifstream bias8_file("data/fc8_bias.txt");
@@ -966,7 +1021,7 @@ SC_MODULE( FC8 ) {
 					fc8_out[i] *= 100;
 				}
 
-				vector< pair<float,int> > final_sort;
+				
 
 				for (int i = 0 ; i < 1000 ; i++) {
 					final_sort.push_back(make_pair(fc8_out[i],i)); 
@@ -974,9 +1029,9 @@ SC_MODULE( FC8 ) {
 
 				sort(final_sort.begin(),final_sort.end());
 
-				for (int i = 0 ; i < 1000 ; i++){
-					cout << final_sort[i].first << " " << final_sort[i].second << "\n";
-				}
+				// for (int i = 0 ; i < 1000 ; i++){
+				// 	cout << final_sort[i].first << " " << final_sort[i].second << "\n";
+				// }
 
 
 				weight8_file.close();
@@ -1040,6 +1095,7 @@ int sc_main( int argc, char* argv[] ) {
 	FC6 m_FC6( "m_FC6" );
 	FC7 m_FC7( "m_FC7" );
 	FC8 m_FC8( "m_FC8" );
+	Monitor m_Monitor( "m_Monitor" );
 
 	m_Reset( rst );
 	m_clock( clk );
@@ -1087,6 +1143,10 @@ int sc_main( int argc, char* argv[] ) {
 	m_FC8.clock( clk );
 	m_FC8.stage7_valid( stage7_valid );
 	m_FC8.stage8_valid( stage8_valid );
+
+	m_Monitor.rst( rst );
+	m_Monitor.clock( clk );
+	m_Monitor.stage8_valid( stage8_valid );
 	
 	sc_start( 500, SC_NS );
 	return 0;
