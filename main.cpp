@@ -71,7 +71,6 @@ SC_MODULE( Monitor ) {
 				while (getline(name_file, line)) {
 					name[idx_name] = line;
 					idx_name++;
-					name[idx_name].erase(remove(name[idx_name].begin(),name[idx_name].end(),' '),name[idx_name].end());
 				}
 				
 				name_file.close();
@@ -80,7 +79,7 @@ SC_MODULE( Monitor ) {
         		cout<<"  "<<setw(5)<<"idx"<<"  |    "<<setw(10)<<"val"<<"  |    "<<setw(10)<<"possibility"<<"  |      "<<setw(10)<<"class name"<<"\n";
         		cout<<"==================================================================\n";
 				for (int i = 999; i >= 900; i--) {
-					cout<<"  "<<setw(5)<<index[i]<<"  |    "<<setprecision(6)<<setw(10)<<val[i]<<"  |    "<<setprecision(6)<<setw(10)<<prob[i]<<"   |      "<<setw(10)<<name[index[i]]<<"\n";
+					cout<<left<<"  "<<setw(5)<<index[i]<<"  |    "<<setprecision(6)<<setw(10)<<val[i]<<"  |    "<<setprecision(6)<<setw(10)<<prob[i]<<"   |      "<<setw(10)<<name[index[i]]<<"\n";
 				}
 				cout<<"==================================================================\n";
 			} 
