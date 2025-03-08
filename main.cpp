@@ -3,6 +3,8 @@
 #include <iomanip>
 #include <algorithm>
 #include <cmath>
+#include <functional>
+#include <vector>
 
 using namespace std;
 
@@ -111,15 +113,9 @@ SC_MODULE( Pad_Conv1_MaxP1 ) {
 								}
 							}
 
-							if ( (z == 0 && i == 0 && j == 0) || (z == 0 && i == 0 && j == 1) || (z == 63 && i == 54 && j == 54))
-								cout << "test1 : " << conv1_out[z][i][j];
-
 							conv1_out[z][i][j] += conv1_bias;
 							if( conv1_out[z][i][j] < 0) 
 								conv1_out[z][i][j] = 0;
-
-							if ( (z == 0 && i == 0 && j == 0) || (z == 0 && i == 0 && j == 1) || (z == 63 && i == 54 && j == 54))
-								cout << "test2 : "  << conv1_out[z][i][j];
 
 						}
 					}
@@ -140,10 +136,10 @@ SC_MODULE( Pad_Conv1_MaxP1 ) {
 					for (int j = 0; j < 27; j++) {
 						for (int k = 0; k < 27; k++) {
 
-							stage1_out = 1000000;
+							stage1_out = -1000000;
 							for (int l = 0; l < 3; l++) {
 								for (int m = 0; m < 3; m++) {
-									if(conv1_out[i][j*2+l][k*2+m] < stage1_out) {
+									if(conv1_out[i][j*2+l][k*2+m] > stage1_out) {
 										stage1_out = conv1_out[i][j*2+l][k*2+m];
 									}
 								}
@@ -276,10 +272,10 @@ SC_MODULE( Pad_Conv2_MaxP2 ) {
 					for (int j = 0; j < 13; j++) {
 						for (int k = 0; k < 13; k++) {
 
-							stage2_out = 1000000;
+							stage2_out = -1000000;
 							for (int l = 0; l < 3; l++) {
 								for (int m = 0; m < 3; m++) {
-									if(conv2_out[i][j*2+l][k*2+m] < stage2_out) {
+									if(conv2_out[i][j*2+l][k*2+m] > stage2_out) {
 										stage2_out = conv2_out[i][j*2+l][k*2+m];
 									}
 								}
@@ -662,10 +658,10 @@ SC_MODULE( Pad_Conv5_MaxP5 ) {
 					for (int j = 0; j < 6; j++) {
 						for (int k = 0; k < 6; k++) {
 
-							stage5_out = 1000000;
+							stage5_out = -1000000;
 							for (int l = 0; l < 3; l++) {
 								for (int m = 0; m < 3; m++) {
-									if(conv5_out[i][j*2+l][k*2+m] < stage5_out) {
+									if(conv5_out[i][j*2+l][k*2+m] > stage5_out) {
 										stage5_out = conv5_out[i][j*2+l][k*2+m];
 									}
 								}
@@ -967,7 +963,21 @@ SC_MODULE( FC8 ) {
 				}
 				for (int i = 0; i < 1000; i++) {
 					fc8_out[i] = exp(fc8_out[i]) / total;
+					fc8_out[i] *= 100;
 				}
+
+				vector< pair<float,int> > final_sort;
+
+				for (int i = 0 ; i < 1000 ; i++) {
+					final_sort.push_back(make_pair(fc8_out[i],i)); 
+				}
+
+				sort(final_sort.begin(),final_sort.end());
+
+				for (int i = 0 ; i < 1000 ; i++){
+					cout << final_sort[i].first << " " << final_sort[i].second << "\n";
+				}
+
 
 				weight8_file.close();
 				bias8_file.close();
@@ -981,7 +991,8 @@ SC_MODULE( FC8 ) {
 			if (stage8_file.is_open()) {
 
 				for (int i = 0; i < 1000; i++) {
-					stage8_file << fixed << setprecision(25) << fc8_out[i] << "\n";
+					stage8_file << fixed << setprecision(25) << final_sort[i].first;
+					stage8_file << " " << final_sort[i].second << "\n";
 				}
 
 				stage8_file.close();
