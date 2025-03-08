@@ -71,7 +71,7 @@ SC_MODULE( Monitor ) {
 				while (getline(name_file, line)) {
 					name[idx_name] = line;
 					idx_name++;
-					name[idx_name].erase(remove(name[idx_name].begin(), name[idx_name].end(), char_to_remove), name[idx_name].end());
+					name[idx_name].erase(remove(name[idx_name].begin(),name[idx_name].end(),' '),name[idx_name].end());
 				}
 				
 				name_file.close();
