@@ -150,6 +150,9 @@ void conv1(){
                 }
 
                 output_1st[oc][oh][ow] = max_value;
+
+                if(oc == 0 && oh == 0 && ow == 0)
+                    cout << "conv1 : " << output_1st[oc][oh][ow] << endl;
             }
         }
     }
