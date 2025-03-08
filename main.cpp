@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -793,6 +794,212 @@ SC_MODULE( FC6 ) {
 	}
 };
 
+SC_MODULE( FC7 ) {	
+
+	sc_in < bool > rst;
+	sc_in_clk clock;
+	sc_in < bool > stage6_valid;
+	sc_out < bool > stage7_valid;
+
+	float image_pad [4096];
+	float fc7_ker [4096];
+	float fc7_bias;
+	float fc7_out [4096];
+		
+	void run() {
+
+		float temp;
+
+		if ( rst.read() == 1 ) {
+		}
+		else if ( stage6_valid.read() == true ) {
+
+			ifstream input_file("stage6_output.txt");
+			if (input_file.is_open()) {
+				
+				for (int i = 0; i < 4096; i++) {
+					input_file >> temp;
+					image_pad[i] = temp;
+				}
+				input_file.close();
+			} 
+			else {
+				cout << "Failed of open stage6 image!!" << endl;
+				return ;
+			}
+
+			cout << fixed << setprecision(25) << image_pad[0] << endl;
+			cout << fixed << setprecision(25) << image_pad[1] << endl;
+			cout << fixed << setprecision(25) << image_pad[4095] << endl;
+
+			ifstream weight7_file("data/fc7_weight.txt");
+			ifstream bias7_file("data/fc7_bias.txt");
+			if (weight7_file.is_open() && bias7_file.is_open()) {
+				for (int z = 0; z < 4096; z++) {
+
+					for (int i = 0; i < 4096; i++) {
+						weight7_file >> temp;
+						fc7_ker[i] = temp;
+					}
+					bias7_file >> temp;
+					fc7_bias = temp;
+
+
+					fc7_out[z] = 0;
+
+					for (int j = 0; j < 4096; j++) 
+						fc7_out[z] += image_pad[j] * fc7_ker[j];
+
+					fc7_out[z] += fc7_bias;
+
+					if( fc7_out[z] < 0) 
+						fc7_out[z] = 0;
+
+					
+
+				}
+				weight7_file.close();
+				bias7_file.close();
+			} 
+			else {
+				cout << "Failed of open fc7 weight and/or bias!!" << endl;
+				return ;
+			}
+
+			ofstream stage7_file("stage7_output.txt");
+			if (stage7_file.is_open()) {
+
+				for (int i = 0; i < 4096; i++) {
+					stage7_file << fixed << setprecision(25) << fc7_out[i] << "\n";
+				}
+
+				stage7_file.close();
+			}
+			else {
+				cout << "Failed of open stage7 image!!" << endl;
+				return ;
+			}
+
+			stage7_valid.write(1);
+		}
+		else if ( stage6_valid.read() == false ) {
+			stage7_valid.write(0);
+		}
+	}
+	
+	SC_CTOR( FC7 )
+	{	
+		SC_METHOD( run );
+		sensitive << clock.pos();
+		dont_initialize();
+	}
+};
+
+SC_MODULE( FC8 ) {	
+
+	sc_in < bool > rst;
+	sc_in_clk clock;
+	sc_in < bool > stage7_valid;
+	sc_out < bool > stage8_valid;
+
+	float image_pad [4096];
+	float fc8_ker [4096];
+	float fc8_bias;
+	float fc8_out [1000];
+		
+	void run() {
+
+		float temp;
+
+		if ( rst.read() == 1 ) {
+		}
+		else if ( stage7_valid.read() == true ) {
+
+			ifstream input_file("stage7_output.txt");
+			if (input_file.is_open()) {
+				
+				for (int i = 0; i < 4096; i++) {
+					input_file >> temp;
+					image_pad[i] = temp;
+				}
+				input_file.close();
+			} 
+			else {
+				cout << "Failed of open stage7 image!!" << endl;
+				return ;
+			}
+
+			cout << fixed << setprecision(25) << image_pad[0] << endl;
+			cout << fixed << setprecision(25) << image_pad[1] << endl;
+			cout << fixed << setprecision(25) << image_pad[4095] << endl;
+
+			ifstream weight8_file("data/fc8_weight.txt");
+			ifstream bias8_file("data/fc8_bias.txt");
+			if (weight8_file.is_open() && bias8_file.is_open()) {
+				for (int z = 0; z < 1000; z++) {
+
+					for (int i = 0; i < 4096; i++) {
+						weight8_file >> temp;
+						fc8_ker[i] = temp;
+					}
+					bias8_file >> temp;
+					fc8_bias = temp;
+
+
+					fc8_out[z] = 0;
+
+					for (int j = 0; j < 4096; j++) 
+						fc8_out[z] += image_pad[j] * fc8_ker[j];
+
+					fc8_out[z] += fc8_bias;
+
+				}
+
+				float total = 0;
+				for (int i = 0; i < 1000; i++) {
+					total += exp(fc8_out[i]);
+				}
+				for (int i = 0; i < 1000; i++) {
+					fc8_out[i] = exp(fc8_out[i]) / total;
+				}
+
+				weight8_file.close();
+				bias8_file.close();
+			} 
+			else {
+				cout << "Failed of open fc8 weight and/or bias!!" << endl;
+				return ;
+			}
+
+			ofstream stage8_file("stage8_output.txt");
+			if (stage8_file.is_open()) {
+
+				for (int i = 0; i < 1000; i++) {
+					stage8_file << fixed << setprecision(25) << fc8_out[i] << "\n";
+				}
+
+				stage8_file.close();
+			}
+			else {
+				cout << "Failed of open stage8 image!!" << endl;
+				return ;
+			}
+
+			stage8_valid.write(1);
+		}
+		else if ( stage7_valid.read() == false ) {
+			stage8_valid.write(0);
+		}
+	}
+	
+	SC_CTOR( FC8 )
+	{	
+		SC_METHOD( run );
+		sensitive << clock.pos();
+		dont_initialize();
+	}
+};
+
 int sc_main( int argc, char* argv[] ) {
 	sc_signal < bool > clk, rst;
 	sc_signal < bool > image_valid;
@@ -802,6 +1009,8 @@ int sc_main( int argc, char* argv[] ) {
 	sc_signal < bool > stage4_valid;
 	sc_signal < bool > stage5_valid;
 	sc_signal < bool > stage6_valid;
+	sc_signal < bool > stage7_valid;
+	sc_signal < bool > stage8_valid;
 	
 	Reset m_Reset( "m_Reset", 10 );
 	Clock m_clock( "m_clock", 5, 200 );
@@ -812,6 +1021,8 @@ int sc_main( int argc, char* argv[] ) {
 	Pad_Conv4 m_Pad_Conv4( "m_Pad_Conv4" );
 	Pad_Conv5_MaxP5 m_Pad_Conv5_MaxP5( "m_Pad_Conv5_MaxP5" );
 	FC6 m_FC6( "m_FC6" );
+	FC7 m_FC7( "m_FC7" );
+	FC8 m_FC8( "m_FC8" );
 
 	m_Reset( rst );
 	m_clock( clk );
@@ -849,6 +1060,16 @@ int sc_main( int argc, char* argv[] ) {
 	m_FC6.clock( clk );
 	m_FC6.stage5_valid( stage5_valid );
 	m_FC6.stage6_valid( stage6_valid );
+
+	m_FC7.rst( rst );
+	m_FC7.clock( clk );
+	m_FC7.stage6_valid( stage6_valid );
+	m_FC7.stage7_valid( stage7_valid );
+
+	m_FC8.rst( rst );
+	m_FC8.clock( clk );
+	m_FC8.stage7_valid( stage7_valid );
+	m_FC8.stage8_valid( stage8_valid );
 	
 	sc_start( 500, SC_NS );
 	return 0;
