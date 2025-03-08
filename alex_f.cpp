@@ -44,10 +44,10 @@ void conv1(){
     float output[OUTPUT_CHANNELS][OUTPUT_HEIGHT][OUTPUT_WIDTH];
     float bias[OUTPUT_CHANNELS];
     // Create convolution module
-    //Convolution convolution("convolution");
+    //Convolution convolution("../data/convolution");
 
     // Load input data from file
-    std::ifstream input_file("dog.txt");
+    std::ifstream input_file("../data/dog.txt");
     if (input_file.is_open()) {
         float temp;
         for (int ic = 0; ic < INPUT_CHANNELS; ic++) {
@@ -65,14 +65,14 @@ void conv1(){
     }
 
     // Load weight data from file
-    std::ifstream weight_file("conv1_weight.txt");
+    std::ifstream weight_file("../data/conv1_weight.txt");
     if (!weight_file.is_open()) {
         std::cout << "Failed to open weight.txt" << std::endl;
         return ;
     }
 
     // Load bias data from file
-    std::ifstream bias_file("conv1_bias.txt");
+    std::ifstream bias_file("../data/conv1_bias.txt");
     if (bias_file.is_open()) {
         float temp;
         for (int oc = 0; oc < OUTPUT_CHANNELS; oc++) {
@@ -181,18 +181,18 @@ void conv2(){
     float output[OUTPUT_CHANNELS][OUTPUT_HEIGHT][OUTPUT_WIDTH];
     float bias[OUTPUT_CHANNELS];
     // Create convolution module
-    //Convolution convolution("convolution");
+    //Convolution convolution("../data/convolution");
 
 
     // Load weight data from file
-    std::ifstream weight_file("conv2_weight.txt");
+    std::ifstream weight_file("../data/conv2_weight.txt");
     if (!weight_file.is_open()) {
         std::cout << "Failed to open conv2_weight.txt" << std::endl;
         return ;
     }
 
     // Load bias data from file
-    std::ifstream bias_file("conv2_bias.txt");
+    std::ifstream bias_file("../data/conv2_bias.txt");
     if (bias_file.is_open()) {
         float temp;
         for (int oc = 0; oc < OUTPUT_CHANNELS; oc++) {
@@ -298,18 +298,18 @@ void conv3(){
 
     float bias[OUTPUT_CHANNELS];
     // Create convolution module
-    //Convolution convolution("convolution");
+    //Convolution convolution("../data/convolution");
 
 
     // Load weight data from file
-    std::ifstream weight_file("conv3_weight.txt");
+    std::ifstream weight_file("../data/conv3_weight.txt");
     if (!weight_file.is_open()) {
         std::cout << "Failed to open conv3_weight.txt" << std::endl;
         return ;
     }
 
     // Load bias data from file
-    std::ifstream bias_file("conv3_bias.txt");
+    std::ifstream bias_file("../data/conv3_bias.txt");
     if (bias_file.is_open()) {
         float temp;
         for (int oc = 0; oc < OUTPUT_CHANNELS; oc++) {
@@ -395,18 +395,18 @@ void conv4(){
 
     float bias[OUTPUT_CHANNELS];
     // Create convolution module
-    //Convolution convolution("convolution");
+    //Convolution convolution("../data/convolution");
 
 
     // Load weight data from file
-    std::ifstream weight_file("conv4_weight.txt");
+    std::ifstream weight_file("../data/conv4_weight.txt");
     if (!weight_file.is_open()) {
         std::cout << "Failed to open conv4_weight.txt" << std::endl;
         return ;
     }
 
     // Load bias data from file
-    std::ifstream bias_file("conv4_bias.txt");
+    std::ifstream bias_file("../data/conv4_bias.txt");
     if (bias_file.is_open()) {
         float temp;
         for (int oc = 0; oc < OUTPUT_CHANNELS; oc++) {
@@ -495,18 +495,18 @@ void conv5(){
     float output[OUTPUT_CHANNELS][OUTPUT_HEIGHT][OUTPUT_WIDTH];
     float bias[OUTPUT_CHANNELS];
     // Create convolution module
-    //Convolution convolution("convolution");
+    //Convolution convolution("../data/convolution");
 
 
     // Load weight data from file
-    std::ifstream weight_file("conv5_weight.txt");
+    std::ifstream weight_file("../data/conv5_weight.txt");
     if (!weight_file.is_open()) {
         std::cout << "Failed to open conv5_weight.txt" << std::endl;
         return ;
     }
 
     // Load bias data from file
-    std::ifstream bias_file("conv5_bias.txt");
+    std::ifstream bias_file("../data/conv5_bias.txt");
     if (bias_file.is_open()) {
         float temp;
         for (int oc = 0; oc < OUTPUT_CHANNELS; oc++) {
@@ -606,14 +606,14 @@ void fc6(){
 
 
     // Load weight data from file
-    std::ifstream weight_file("fc6_weight.txt");
+    std::ifstream weight_file("../data/fc6_weight.txt");
     if (!weight_file.is_open()) {
         std::cout << "Failed to open fc6_weight.txt" << std::endl;
         return ;
     }
 
     // Load bias data from file
-    std::ifstream bias_file("fc6_bias.txt");
+    std::ifstream bias_file("../data/fc6_bias.txt");
     if (!bias_file.is_open()) {
         std::cout << "Failed to open fc6_bias.txt" << std::endl;
         return ;
@@ -650,14 +650,14 @@ void fc7(){
 
 
     // Load weight data from file
-    std::ifstream weight_file("fc7_weight.txt");
+    std::ifstream weight_file("../data/fc7_weight.txt");
     if (!weight_file.is_open()) {
         std::cout << "Failed to open fc7_weight.txt" << std::endl;
         return ;
     }
 
     // Load bias data from file
-    std::ifstream bias_file("fc7_bias.txt");
+    std::ifstream bias_file("../data/fc7_bias.txt");
     if (!bias_file.is_open()) {
         std::cout << "Failed to open fc7_bias.txt" << std::endl;
         return ;
@@ -690,14 +690,14 @@ void fc8(){
 
 
     // Load weight data from file
-    std::ifstream weight_file("fc8_weight.txt");
+    std::ifstream weight_file("../data/fc8_weight.txt");
     if (!weight_file.is_open()) {
         std::cout << "Failed to open fc8_weight.txt" << std::endl;
         return ;
     }
 
     // Load bias data from file
-    std::ifstream bias_file("fc8_bias.txt");
+    std::ifstream bias_file("../data/fc8_bias.txt");
     if (!bias_file.is_open()) {
         std::cout << "Failed to open fc8_bias.txt" << std::endl;
         return ;

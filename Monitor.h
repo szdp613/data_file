@@ -14,7 +14,7 @@ SC_MODULE( Monitor ) {
         int idx1 = 0, idx2 = 0, idx3 = 0, idx4 = 0, idx5 = 0;
         string s1, s2, s3, s4, s5, temp_str;
 
-        ifstream class_name_file("imagenet_classes.txt");
+        ifstream class_name_file("../data/imagenet_classes.txt");
         if(!class_name_file){
             cout << "Can't open imagenet_classes.txt for reading\n";
         }
