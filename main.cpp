@@ -89,7 +89,10 @@ SC_MODULE( Monitor ) {
         		cout<<"  "<<setw(5)<<"idx"<<"  |    "<<setw(10)<<"val"<<"  |    "<<setw(10)<<"possibility"<<"  |      "<<setw(10)<<"class name"<<"\n";
         		cout<<"==================================================================\n";
 				for (int i = 999; i >= 900; i--) {
-					cout<<left<<"  "<<setw(5)<<index[i]<<"  |    "<<setprecision(6)<<val[i]<<"  |    "<<setprecision(6)<<prob[i]<<"   |      "<<setw(10)<<name[index[i]]<<"\n";
+					cout<<left<<"  "<<setw(5)<<index[i]<<"  |    ";
+					cout<<setprecision(6)<<val[i]<<"  |    ";
+					cout<<setprecision(6)<<prob[i]<<"   |      ";
+					cout<<setw(10)<<name[index[i]]<<"\n";
 				}
 				cout<<"==================================================================\n";
 			} 
@@ -1027,7 +1030,7 @@ SC_MODULE( FC8 ) {
 						fc8_out[z] += image_pad[j] * fc8_ker[j];
 
 					fc8_out[z] += fc8_bias;
-					val_final[i] = fc8_out[i];
+					val_final[z] = fc8_out[z];
 
 				}
 
